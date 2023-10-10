@@ -1,0 +1,4 @@
+(library
+ (name zenith)
+ (modules render vector matrix mesh constants logging)
+ (libraries graphics))
