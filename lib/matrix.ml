@@ -9,6 +9,8 @@ let ydim m = snd m.dim
 let xy_to_i m x y = (x * xdim m) + y
 let get mat n m = Array.get mat.arr (xy_to_i mat n m)
 let set mat n m x = Array.set mat.arr (xy_to_i mat n m) x
+let string_of_dim dim = Printf.sprintf "(%dx%d)" (fst dim) (snd dim)
+let dim_eq a b = fst a = fst b && snd a = snd b
 
 let id_matrix n m =
   let mat = get_matrix n m in
@@ -33,21 +35,40 @@ let print_matrix mat =
   done;
   print_endline "]"
 
-let matmul a b =
-  if xdim a != ydim a || a.dim != b.dim then
-    fatal rc_OOB "Can only matmul square matrices of identical shape";
-  let dim = xdim a in
-  let dest = id_matrix dim dim in
-  for y = 0 to dim - 1 do
-    let col = y * dim in
-    for x = 0 to dim - 1 do
-      for i = 0 to dim - 1 do
-        Array.set dest.arr (col + x)
-          (Array.get b.arr (i + col) *. Array.get a.arr (x + (i * 4)))
-      done
+let transpose mat =
+  let n, m = mat.dim in
+  let transposed = get_matrix m n in
+  for i = 0 to n - 1 do
+    for j = 0 to m - 1 do
+      set transposed j i (get mat i j)
     done
   done;
-  dest
+  transposed
+
+let matmul a b =
+  if not (dim_eq a.dim b.dim) then
+    fatal rc_OOB
+      (Printf.sprintf
+         "Can only matmul square matrices of identical shape, got %s and %s"
+         (string_of_dim a.dim) (string_of_dim b.dim));
+
+  let rows_a = xdim a in
+  let cols_a = ydim a in
+  let cols_b = ydim b in
+
+  let result = get_matrix rows_a cols_b in
+
+  for i = 0 to rows_a - 1 do
+    for j = 0 to cols_b - 1 do
+      let dot_product = ref 0.0 in
+      for k = 0 to cols_a - 1 do
+        dot_product := !dot_product +. (get a i k *. get b k j)
+      done;
+      set result i j !dot_product
+    done
+  done;
+
+  result
 
 let vecmatmul v m =
   let arr = Array.get m.arr in
@@ -57,14 +78,3 @@ let vecmatmul v m =
     z = vec_dot v { x = arr 2; y = arr 6; z = arr 10; w = arr 14 };
     w = vec_dot v { x = arr 3; y = arr 7; z = arr 11; w = arr 15 };
   }
-
-let clip_matrix fov aspect_ratio near far =
-  let out = id_matrix 4 4 in
-  let f = 1. /. Float.tan (fov *. 0.5) in
-  set out 0 0 (f *. aspect_ratio);
-  set out 1 1 f;
-  set out 2 2 ((far +. near) /. (far -. near));
-  set out 2 3 1.;
-  set out 3 2 (2. *. near *. far /. (near -. far));
-  set out 3 3 0.;
-  out

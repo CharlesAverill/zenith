@@ -1,2 +1,3 @@
 (test
- (name zenith))
+ (name zenith)
+ (libraries zenith alcotest))
