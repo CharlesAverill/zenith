@@ -15,8 +15,6 @@ let parse_arguments () =
 
   Arg.parse speclist (fun _ -> ()) usage_msg;
 
-  if !obj_file != "" then (
-    obj := load_obj !obj_file;
-    print_endline "bruh");
+  if !obj_file != "" then obj := load_obj !obj_file;
 
   { obj_mesh = !obj }

@@ -11,7 +11,7 @@ let parse_obj_line line : vernacular option =
       let v = List.map float_of_string xs in
       Some (Vertex (v3 (List.nth v 0) (List.nth v 1) (List.nth v 2)))
   | "l" :: xs ->
-      let edge = List.map (fun s -> (int_of_string s) - 1) xs in
+      let edge = List.map (fun s -> int_of_string s - 1) xs in
       Some (Edge (List.nth edge 0, List.nth edge 1))
   | _ -> None
 
@@ -39,6 +39,6 @@ let parse_obj_file filename =
 let load_obj filename : mesh =
   let lines = parse_obj_file filename in
   let vertices, edges = parse_obj_lines lines [] [] in
-  let out = (List.rev vertices, List.rev edges) in 
+  let out = (List.rev vertices, List.rev edges) in
   (* print_mesh out; *)
   out

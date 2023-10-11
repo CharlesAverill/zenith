@@ -26,8 +26,10 @@ test: fmt
 testf: fmt
 	opam exec -- dune runtest -f
 
+OBJ ?= objs/teapot.obj
+
 run: build
-	opam exec -- dune exec -- zenith
+	opam exec -- dune exec -- zenith -obj $(OBJ)
 
 raw_run: build
 	clear
