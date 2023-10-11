@@ -26,6 +26,7 @@ type return_code = int * string
 let rc_Ok = (0, "OK")
 and rc_Error = (1, "ERROR")
 and rc_OOB = (2, "OUT OF BOUNDS ERROR")
+and rc_MatchError = (3, "MATCH ERROR")
 
 (** ANSI encoding for bold text *)
 let ansi_bold = "\x1b[1m"

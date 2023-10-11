@@ -8,7 +8,7 @@ fmt:
 	opam exec -- dune promote
 
 build: fmt
-	opam exec -- dune build
+	opam exec -- dune build --profile release
 
 install:
 	opam exec -- dune install

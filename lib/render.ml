@@ -45,32 +45,80 @@ let view_matrix eye_pos =
   }
 
 let model_matrix euler_rot =
-  let rad = deg_to_rad euler_rot in
-  let translation = id_matrix 4 4 in
-  let rotation =
-    {
-      arr =
-        [|
-          Float.cos rad;
-          0.;
-          Float.sin rad;
-          0.;
-          0.;
-          1.;
-          0.;
-          0.;
-          -.Float.sin rad;
-          0.;
-          Float.cos rad;
-          0.;
-          0.;
-          0.;
-          0.;
-          1.;
-        |];
-      dim = (4, 4);
-    }
+  let radx, rady, radz =
+    match euler_rot with
+    | rotx, roty, rotz -> (deg_to_rad rotx, deg_to_rad roty, deg_to_rad rotz)
   in
+  let translation = id_matrix 4 4 in
+  let rotation_x, rotation_y, rotation_z =
+    ( {
+        arr =
+          [|
+            1.;
+            0.;
+            0.;
+            0.;
+            0.;
+            Float.cos radx;
+            -.Float.sin radx;
+            0.;
+            0.;
+            Float.sin radx;
+            Float.cos radx;
+            0.;
+            0.;
+            0.;
+            0.;
+            1.;
+          |];
+        dim = (4, 4);
+      },
+      {
+        arr =
+          [|
+            Float.cos rady;
+            0.;
+            Float.sin rady;
+            0.;
+            0.;
+            1.;
+            0.;
+            0.;
+            -.Float.sin rady;
+            0.;
+            Float.cos rady;
+            0.;
+            0.;
+            0.;
+            0.;
+            1.;
+          |];
+        dim = (4, 4);
+      },
+      {
+        arr =
+          [|
+            Float.cos radz;
+            -.Float.sin radz;
+            0.;
+            0.;
+            Float.sin radz;
+            Float.cos radz;
+            0.;
+            0.;
+            0.;
+            0.;
+            1.;
+            0.;
+            0.;
+            0.;
+            0.;
+            1.;
+          |];
+        dim = (4, 4);
+      } )
+  in
+  let rotation = matmul (matmul rotation_x rotation_y) rotation_z in
   let scale_factor = 1. in
   let scale =
     {
@@ -125,14 +173,14 @@ let projection_matrix fov aspect_ratio z_near z_far =
     dim = (4, 4);
   }
 
-let project_mesh mesh angle_incr =
+let project_mesh mesh euler_rot =
   let mvp =
     matmul
       (matmul
          (projection_matrix Config.fov Config.aspect_ratio Config.z_near
             Config.z_far)
          (view_matrix Config.viewpoint))
-      (model_matrix (Config.start_angle +. angle_incr))
+      (model_matrix euler_rot)
   in
   let f1, f2 =
     ( (Config.z_far -. Config.z_near) /. 2.,
@@ -148,23 +196,28 @@ let project_mesh mesh angle_incr =
       {
         x = 0.5 *. float_of_int viewportw *. (x.x +. 1.);
         y = 0.5 *. float_of_int viewporth *. (x.y +. 1.);
-        z = (x.z *. f1) +. f2;
+        z = (x.z *. f2) +. f1;
         w = x.w;
       })
 
-let draw_mesh mesh angle_incr =
+let draw_mesh mesh euler_rot =
   let c = foreground in
   set_color white;
-  let verts, edges = project_mesh mesh angle_incr in
+  let verts, edges = project_mesh mesh euler_rot in
   let _ =
     List.fold_left
       (fun visited_verts edge ->
         let v1, v2 = (List.nth verts (fst edge), List.nth verts (snd edge)) in
         draw_line v1 v2;
-        if not (List.exists (fun x -> x = v1) visited_verts) then
-          fill_circle (int_of_float v1.x) (int_of_float v1.y) Config.vert_radius;
-        if not (List.exists (fun x -> x = v2) visited_verts) then
-          fill_circle (int_of_float v2.x) (int_of_float v2.y) Config.vert_radius;
+        if Config.draw_verts then (
+          set_color Config.vert_color;
+          if not (List.exists (fun x -> x = v1) visited_verts) then
+            fill_circle (int_of_float v1.x) (int_of_float v1.y)
+              Config.vert_radius;
+          if not (List.exists (fun x -> x = v2) visited_verts) then
+            fill_circle (int_of_float v2.x) (int_of_float v2.y)
+              Config.vert_radius;
+          set_color white);
         v1 :: v2 :: visited_verts)
       [] edges
   in

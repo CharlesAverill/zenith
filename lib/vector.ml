@@ -1,7 +1,7 @@
 type vec = { x : float; y : float; z : float; w : float }
 
 let v3 x y z = { x; y; z; w = 1. }
-let zvec = { x = 0.; y = 0.; z = 0.; w = 1. }
+let zvec = { x = 0.; y = 0.; z = 0.; w = 0. }
 let vec_length vec = (vec.x *. vec.x) +. (vec.y *. vec.y) +. (vec.z *. vec.z)
 
 let vec_unit vec =
@@ -10,3 +10,6 @@ let vec_unit vec =
 
 let vec_dot a b = (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z) +. (a.w *. b.w)
 let vec_div v n = { x = v.x /. n; y = v.y /. n; z = v.y /. n; w = v.w }
+
+let print_vec vec =
+  print_endline (Printf.sprintf "<%f, %f, %f, %f>" vec.x vec.y vec.z vec.w)
