@@ -44,12 +44,21 @@ let view_matrix eye_pos =
     dim = (4, 4);
   }
 
-let model_matrix euler_rot =
+let model_matrix euler_rot translation_vec =
   let radx, rady, radz =
     match euler_rot with
-    | rotx, roty, rotz -> (deg_to_rad rotx, deg_to_rad roty, deg_to_rad rotz)
+    | { x = rotx; y = roty; z = rotz; w = _ } ->
+        (deg_to_rad rotx, deg_to_rad roty, deg_to_rad rotz)
+  and tx, ty, tz =
+    match translation_vec with
+    | { x = tx; y = ty; z = tz; w = _ } -> (tx, ty, tz)
   in
-  let translation = id_matrix 4 4 in
+  let translation =
+    {
+      arr = [| 1.; 0.; 0.; tx; 0.; 1.; 0.; ty; 0.; 0.; 1.; tz; 0.; 0.; 0.; 1. |];
+      dim = (4, 4);
+    }
+  in
   let rotation_x, rotation_y, rotation_z =
     ( {
         arr =
@@ -173,14 +182,14 @@ let projection_matrix fov aspect_ratio z_near z_far =
     dim = (4, 4);
   }
 
-let project_mesh mesh euler_rot =
+let project_mesh mesh euler_rot translation =
   let mvp =
     matmul
       (matmul
          (projection_matrix Config.fov Config.aspect_ratio Config.z_near
             Config.z_far)
          (view_matrix Config.viewpoint))
-      (model_matrix euler_rot)
+      (model_matrix euler_rot translation)
   in
   let f1, f2 =
     ( (Config.z_far -. Config.z_near) /. 2.,
@@ -200,10 +209,10 @@ let project_mesh mesh euler_rot =
         w = x.w;
       })
 
-let draw_mesh mesh euler_rot =
+let draw_mesh mesh euler_rot translation =
   let c = foreground in
   set_color Config.edge_color;
-  let verts, edges = project_mesh mesh euler_rot in
+  let verts, edges = project_mesh mesh euler_rot translation in
   let _ =
     List.fold_left
       (fun visited_verts edge ->

@@ -1,7 +1,7 @@
 # ZENITH
 Zen Engine for Navigating wIreframes In Three-dimensional Holographic space
 
-![teapot](media/success2/teapot.gif)
+![demo](media/demo.gif)
 
 ## Usage
 
