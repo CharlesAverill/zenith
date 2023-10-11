@@ -9,3 +9,4 @@
 *.cmxs
 *.cmxa
 _build
+.vscode/*

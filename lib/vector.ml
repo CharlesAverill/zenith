@@ -11,5 +11,5 @@ let vec_unit vec =
 let vec_dot a b = (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z) +. (a.w *. b.w)
 let vec_div v n = { x = v.x /. n; y = v.y /. n; z = v.y /. n; w = v.w }
 
-let print_vec vec =
-  print_endline (Printf.sprintf "<%f, %f, %f, %f>" vec.x vec.y vec.z vec.w)
+let string_of_vec vec =
+  Printf.sprintf "<%f, %f, %f, %f>" vec.x vec.y vec.z vec.w

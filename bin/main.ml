@@ -11,6 +11,7 @@ let clear_window color =
   fill_rect 0 0 (size_x ()) (size_y ());
   set_color fg
 
+let to_draw = ref cube
 let break_mainloop = ref false
 let euler = ref (0., 0., 0.)
 
@@ -45,7 +46,7 @@ let input_dispatch key =
 let draw_scene () =
   clear_window black;
   set_color white;
-  draw_mesh pyramid !euler;
+  draw_mesh !to_draw !euler;
   let input = wait_next_event [ Poll ] in
   synchronize ();
   if input.keypressed then input_dispatch (read_key ())
@@ -55,6 +56,8 @@ let rec main_loop () =
   if !break_mainloop then () else main_loop ()
 
 let () =
+  let args = Argparse.parse_arguments () in
+  to_draw := args.obj_mesh;
   open_graph (" " ^ string_of_int viewportw ^ "x" ^ string_of_int viewporth);
   auto_synchronize false;
   main_loop ()

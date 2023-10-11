@@ -2,6 +2,13 @@ open Vector
 
 type mesh = vec list * (int * int) list
 
+let print_mesh mesh =
+  let vertices, edges = mesh in
+  Printf.printf "Vertices:\n";
+  List.iteri (fun i v -> Printf.printf "%d: %s\n" i (string_of_vec v)) vertices;
+  Printf.printf "\nEdges:\n";
+  List.iter (fun (a, b) -> Printf.printf "(%d, %d)\n" a b) edges
+
 let map_verts mesh f = (List.map f (fst mesh), snd mesh)
 
 let triangle =
