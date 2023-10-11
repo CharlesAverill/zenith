@@ -11,3 +11,4 @@ let rotation_incr = 7.5
 let draw_verts = false
 let vert_radius = 5
 let vert_color = red
+let edge_color = green

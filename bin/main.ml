@@ -37,6 +37,8 @@ let input_dispatch key =
   (* Roll *)
   | 'q' -> update_euler 2 (-.rotation_incr)
   | 'e' -> update_euler 2 rotation_incr
+  (* Reset scene *)
+  | 'r' -> euler := (0., 0., 0.)
   (* Escape *)
   | x when x = char_of_int 27 -> break_mainloop := true
   | _ ->
@@ -45,7 +47,6 @@ let input_dispatch key =
 
 let draw_scene () =
   clear_window black;
-  set_color white;
   draw_mesh !to_draw !euler;
   let input = wait_next_event [ Poll ] in
   synchronize ();

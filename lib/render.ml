@@ -202,7 +202,7 @@ let project_mesh mesh euler_rot =
 
 let draw_mesh mesh euler_rot =
   let c = foreground in
-  set_color white;
+  set_color Config.edge_color;
   let verts, edges = project_mesh mesh euler_rot in
   let _ =
     List.fold_left
@@ -217,7 +217,7 @@ let draw_mesh mesh euler_rot =
           if not (List.exists (fun x -> x = v2) visited_verts) then
             fill_circle (int_of_float v2.x) (int_of_float v2.y)
               Config.vert_radius;
-          set_color white);
+          set_color Config.edge_color);
         v1 :: v2 :: visited_verts)
       [] edges
   in
