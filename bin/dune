@@ -1,4 +1,4 @@
 (executable
  (public_name zenith)
  (name main)
- (libraries zenith graphics))
+ (libraries zenith zenith.logging graphics))

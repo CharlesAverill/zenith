@@ -1,4 +1,4 @@
-open Vector
+open Math.Vector
 
 type mesh = vec list * (int * int) list
 

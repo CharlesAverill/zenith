@@ -1,0 +1,5 @@
+(library
+ (name math)
+ (public_name zenith.math)
+ (libraries zenith.logging)
+ (modules matrix vector constants))

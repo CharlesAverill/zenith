@@ -1,5 +1,5 @@
-open Zenith.Matrix
-open Zenith.Vector
+open Math.Matrix
+open Math.Vector
 
 (* Functions to test *)
 module To_test = struct

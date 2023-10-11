@@ -1,9 +1,8 @@
 open Graphics
+open Logging
 open Zenith.Config
-open Zenith.Logging
 open Zenith.Mesh
-open Zenith.Render
-open List
+open Zenith.Renderer
 
 let clear_window color =
   let fg = foreground in

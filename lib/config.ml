@@ -1,4 +1,4 @@
-open Vector
+open Math.Vector
 open Graphics
 
 let viewportw, viewporth = (700, 700)

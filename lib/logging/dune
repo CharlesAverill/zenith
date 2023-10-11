@@ -1,0 +1,4 @@
+(library
+ (name logging)
+ (public_name zenith.logging)
+ (modules logging))

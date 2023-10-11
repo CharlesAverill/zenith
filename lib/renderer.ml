@@ -1,9 +1,9 @@
-open Constants
+open Math.Constants
 open Config
 open Graphics
-open Matrix
+open Math.Matrix
 open Mesh
-open Vector
+open Math.Vector
 
 let draw_line a b =
   moveto (int_of_float a.x) (int_of_float a.y);

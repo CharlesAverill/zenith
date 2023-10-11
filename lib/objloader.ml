@@ -1,5 +1,5 @@
 open Mesh
-open Vector
+open Math.Vector
 
 type vernacular = Vertex of vec | Edge of (int * int)
 

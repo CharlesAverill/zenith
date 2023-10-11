@@ -1,5 +1,5 @@
 open Zenith.Mesh
-open Zenith.Obj
+open Zenith.Objloader
 
 type arguments = { obj_mesh : mesh }
 
