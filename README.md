@@ -34,6 +34,9 @@ OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj \
 
 If you want to color your Blender models, the only shader compatible with the `Kd` (diffuse color) field of a .MTL file is Principled BSDF.
 
+The logo [model](objs/zenith.obj) and [material](objs/zenith.mtl) were designed in Blender and are a suitable example of supported .OBJ and .MTL vernacular. 
+Blend file available [here](media/logo.blend).
+
 ### Supported .OBJ Vernacular
 
 ```obj
