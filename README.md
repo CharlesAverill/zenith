@@ -55,6 +55,8 @@ mtllib mymat.mtl
 usemtl MyMat
 ```
 
+If two faces share edges but not materials, the face occurring later in the file will overwrite those edges' colors. 
+
 ### Supported .MTL Vernacular
 
 ```mtl
