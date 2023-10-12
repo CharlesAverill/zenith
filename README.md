@@ -12,7 +12,8 @@ ZENITH is built with [dune](https://dune.build), and depends on the OCaml `Graph
 make run                                            # Will render the Utah teapot .obj file
 OBJS="path_to_obj path_to_another_obj ..." make run # Will render each object around a circle
 # Renders the demo shown below
-OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj objs/pyramid.obj objs/cube.obj objs/blender_monkey.obj objs/arwing.obj" make run
+OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj \
+    objs/pyramid.obj objs/cube.obj objs/blender_monkey.obj objs/arwing.obj" make run make run
 ```
 
 ![demo](media/demo.gif)

@@ -87,7 +87,7 @@ let parse_mtls obj_fn mtl_fn : material list =
           | _ -> (name, color))
       (None, None) lines
   in
-  if List.length !found_materials = 0 then
+  if List.length lines != 0 && List.length !found_materials = 0 then
     fatal rc_MaterialError
       ("Material file " ^ mtl_fn
      ^ " did not contain both a material name and diffuse color")
