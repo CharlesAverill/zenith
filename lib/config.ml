@@ -1,7 +1,7 @@
 open Math.Vector
 open Graphics
 
-let viewportw, viewporth = (1000, 1000)
+let viewportw, viewporth = (1080, 1080)
 let viewpoint = v3 0. 0. 30.
 let fov = 45.0
 let aspect_ratio = 1.

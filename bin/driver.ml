@@ -13,7 +13,9 @@ let clear_window color =
 
 let evenly_spaced_positions meshes =
   let n = List.length meshes in
-  let radius = if n > 1 then 1. +. largest_distance meshes else 0. in
+  let largest_dist = largest_distance meshes in
+  _log Log_Debug (string_of_float largest_dist);
+  let radius = if n > 1 then 1. +. largest_dist else 0. in
   let delta_theta = 2.0 *. Float.pi /. float_of_int n in
 
   let rec generate_positions theta count acc =
@@ -21,7 +23,7 @@ let evenly_spaced_positions meshes =
     else
       let x = radius *. Float.cos theta in
       let y = radius *. Float.sin theta in
-      generate_positions (theta +. delta_theta) (count - 1) (v3 x y 0. :: acc)
+      generate_positions (theta +. delta_theta) (count - 1) (acc @ [ v3 x y 0. ])
   in
 
   generate_positions 0.0 n []
@@ -89,7 +91,6 @@ let draw_scene () =
   display_mode false;
   clear_window black;
   (* Draw each mesh at their offset *)
-  (* print_endline (string_of_int (List.length !to_draw - 1)); *)
   for i = 0 to List.length !to_draw - 1 do
     let mesh, offset = List.nth !to_draw i in
     draw_mesh mesh !euler (v3_add !translation offset)
@@ -105,7 +106,6 @@ let rec main_loop () =
 
 let start meshes =
   (* Evenly-space meshes *)
-  _log Log_Debug (string_of_float (largest_distance meshes));
   let mesh_positions = evenly_spaced_positions meshes in
   to_draw := List.combine meshes mesh_positions;
   auto_synchronize false;

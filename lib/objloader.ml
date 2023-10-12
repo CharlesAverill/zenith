@@ -3,16 +3,30 @@ open Math.Vector
 
 type vernacular = Vertex of vec | Edge of (int * int)
 
-let parse_obj_line line : vernacular option =
+let pairs_of_consecutive_elements lst =
+  let rec aux first = function
+    | [] -> []
+    | [ x ] ->
+        [ (x, first) ]
+        (* Empty list or a list with only one element cannot form pairs. *)
+    | x :: y :: rest -> (x, y) :: aux first (y :: rest)
+  in
+  match lst with [] | [ _ ] -> [] | h :: _ :: _ -> aux h lst
+
+let parse_obj_line line : vernacular list option =
   match String.split_on_char ' ' line with
   | [] -> None
   | [ "#" ] -> None (* Comment line *)
   | "v" :: xs ->
       let v = List.map float_of_string xs in
-      Some (Vertex (v3 (List.nth v 0) (List.nth v 1) (List.nth v 2)))
+      Some [ Vertex (v3 (List.nth v 0) (List.nth v 1) (List.nth v 2)) ]
   | "l" :: xs ->
       let edge = List.map (fun s -> int_of_string s - 1) xs in
-      Some (Edge (List.nth edge 0, List.nth edge 1))
+      Some [ Edge (List.nth edge 0, List.nth edge 1) ]
+  | "f" :: xs ->
+      let vertices = List.map (fun s -> int_of_string s - 1) xs in
+      let edges = pairs_of_consecutive_elements vertices in
+      Some (List.map (fun x -> Edge x) edges)
   | _ -> None
 
 let rec parse_obj_lines lines vertices edges =
@@ -20,9 +34,15 @@ let rec parse_obj_lines lines vertices edges =
   | [] -> (vertices, edges)
   | line :: rest -> (
       match parse_obj_line line with
-      | Some (Vertex v) -> parse_obj_lines rest (v :: vertices) edges
-      | Some (Edge e) -> parse_obj_lines rest vertices (e :: edges)
-      | None -> parse_obj_lines rest vertices edges)
+      | Some [ Vertex v ] -> parse_obj_lines rest (v :: vertices) edges
+      | Some [ Edge e ] -> parse_obj_lines rest vertices (e :: edges)
+      | Some (Edge e :: t) ->
+          parse_obj_lines rest vertices
+            (List.map
+               (fun x -> match x with Edge _e -> _e | _ -> (0, 0))
+               (Edge e :: t)
+            @ edges)
+      | _ -> parse_obj_lines rest vertices edges)
 
 let parse_obj_file filename =
   let lines = ref [] in
