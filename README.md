@@ -1,6 +1,8 @@
-![ZENITH Logo](media/logo.png)
+# ZENITH
 
-"Zen Engine for Navigating wIreframes In Three-dimensional Holographic space"
+![ZENITH Logo](media/logo.gif)
+
+ZENITH ("Zen Engine for Navigating wIreframes In Three-dimensional Holographic space") is a wireframe renderer written in OCaml.
 
 ## Usage
 

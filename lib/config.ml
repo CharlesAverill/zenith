@@ -2,7 +2,7 @@ open Math.Vector
 open Graphics
 
 let viewportw, viewporth = (1080, 1080)
-let viewpoint = v3 0. 0. 30.
+let viewpoint = v3 0. 0. 27.
 let fov = 45.0
 let aspect_ratio = 1.
 let z_near = 0.1
