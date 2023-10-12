@@ -10,5 +10,4 @@
 *.cmxa
 _build
 .vscode/*
-*.mtl
 .ocamlformat

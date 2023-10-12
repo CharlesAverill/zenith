@@ -27,7 +27,7 @@ OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj objs/pyramid.obj
 
 ### Blender
 
-If you're using Blender to create 3D models for ZENITH, ensure that, in the export window under `Geometry`, the options "Write Normals," "Include UVs," and "Write Materials" are deactivated. These options generate vernacular in the output `.obj` file that my loader does not support.
+If you want to color your Blender models, the only shader compatible with the `Kd` (diffuse color) field is Principled BSDF.
 
 ### Supported .OBJ Vernacular
 

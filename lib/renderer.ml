@@ -182,7 +182,7 @@ let projection_matrix fov aspect_ratio z_near z_far =
     dim = (4, 4);
   }
 
-let project_mesh mesh euler_rot translation =
+let project_mesh (m : mesh) euler_rot translation : mesh =
   let mvp =
     matmul
       (matmul
@@ -195,7 +195,7 @@ let project_mesh mesh euler_rot translation =
     ( (Config.z_far -. Config.z_near) /. 2.,
       (Config.z_far +. Config.z_near) /. 2. )
   in
-  map_verts mesh (fun v ->
+  map_verts m (fun v ->
       v |> fun x ->
       (* Projection *)
       vecmatmul x mvp |> fun x ->
@@ -209,14 +209,16 @@ let project_mesh mesh euler_rot translation =
         w = x.w;
       })
 
-let draw_mesh mesh euler_rot translation =
+let draw_mesh m euler_rot translation =
   let c = foreground in
   set_color Config.edge_color;
-  let verts, edges = project_mesh mesh euler_rot translation in
+  let verts, edges = project_mesh m euler_rot translation in
   let _ =
     List.fold_left
-      (fun visited_verts edge ->
-        let v1, v2 = (List.nth verts (fst edge), List.nth verts (snd edge)) in
+      (fun (index, visited_verts) e ->
+        let (e1, e2), ecolor = e in
+        let v1, v2 = (List.nth verts e1, List.nth verts e2) in
+        let _ = match ecolor with Some c -> set_color c | _ -> () in
         draw_line v1 v2;
         if Config.draw_verts then (
           set_color Config.vert_color;
@@ -227,7 +229,7 @@ let draw_mesh mesh euler_rot translation =
             fill_circle (int_of_float v2.x) (int_of_float v2.y)
               Config.vert_radius;
           set_color Config.edge_color);
-        v1 :: v2 :: visited_verts)
-      [] edges
+        (index + 1, v1 :: v2 :: visited_verts))
+      (0, []) edges
   in
   set_color c

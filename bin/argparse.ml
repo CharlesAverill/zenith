@@ -9,7 +9,7 @@ let copies l n =
 
 let parse_arguments () =
   let obj_files = ref [] in
-  let objs = ref [ cube ] in
+  let objs : mesh list ref = ref [ cube ] in
   let num_each = ref 1 in
 
   let speclist =

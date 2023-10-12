@@ -1,6 +1,5 @@
 # Blender v3.0.0 OBJ File: ''
 # www.blender.org
-mtllib teapot.mtl
 o teapot
 v 1.368074 2.435437 -0.227403
 v 1.381968 2.400000 -0.229712
