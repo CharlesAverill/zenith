@@ -9,11 +9,13 @@ ZENITH ("Zen Engine for Navigating wIreframes In Three-dimensional Holographic s
 ZENITH is built with [dune](https://dune.build), and depends on the OCaml `Graphics` library. To run:
 
 ```
-make run                                            # Will render the Utah teapot .obj file
-OBJS="path_to_obj path_to_another_obj ..." make run # Will render each object around a circle
+# Will render the Utah teapot .obj file
+make run
+# Will render each object around a circle
+OBJS="path_to_obj path_to_another_obj ..." make run
 # Renders the demo shown below
 OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj \
-    objs/pyramid.obj objs/cube.obj objs/blender_monkey.obj objs/arwing.obj" make run make run
+    objs/pyramid.obj objs/cube.obj objs/blender_monkey.obj objs/arwing.obj" make run
 ```
 
 ![demo](media/demo.gif)
@@ -30,7 +32,10 @@ OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj \
 
 ### Blender
 
-If you want to color your Blender models, the only shader compatible with the `Kd` (diffuse color) field is Principled BSDF.
+If you want to color your Blender models, the only shader compatible with the `Kd` (diffuse color) field of a .MTL file is Principled BSDF.
+
+The logo [model](objs/zenith.obj) and [material](objs/zenith.mtl) were designed in Blender and are a suitable example of supported .OBJ and .MTL vernacular. 
+Blend file available [here](media/logo.blend).
 
 ### Supported .OBJ Vernacular
 
@@ -45,6 +50,23 @@ l 1 2
 l 2 3
 # Faces
 f 1 2 3
+# Faces with vertex normals (ignored)
+f 1/1/1 2/2/2 3/3/3
+# .MTL File Locations
+mtllib mymat.mtl
+# Material Usage
+usemtl MyMat
+```
+
+If two faces share edges but not materials, the face occurring later in the file will overwrite those edges' colors. 
+
+### Supported .MTL Vernacular
+
+```mtl
+# Material Name Declarations
+newmtl MyMat
+# Diffuse Color
+Kd 0.5 0.75 1.0
 ```
 
 ### Axis configuration
