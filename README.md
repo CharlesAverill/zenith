@@ -16,9 +16,13 @@ OBJS="path_to_obj path_to_another_obj ..." make run
 # Renders the demo shown below
 OBJS="objs/uv_sphere.obj objs/torus.obj objs/star_destroyer.obj \
     objs/pyramid.obj objs/cube.obj objs/blender_monkey.obj objs/arwing.obj" make run
+# Renders the lambda cube below (uses a debug feature set at compile-time)
+OBJS="objs/lambdacube.obj" make run
 ```
 
 ![demo](media/demo.gif)
+
+![lambdacube](media/lambdacube.gif)
 
 ## Writeups
 

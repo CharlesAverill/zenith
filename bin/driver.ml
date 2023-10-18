@@ -87,18 +87,29 @@ let input_dispatch key =
       print_int (int_of_char key);
       print_endline ""
 
+let framecount = ref 0
+
+let rotate_mode = false
+
 let draw_scene () =
   display_mode false;
   clear_window black;
   (* Draw each mesh at their offset *)
   for i = 0 to List.length !to_draw - 1 do
+    if rotate_mode then (
+      update_euler 0 (0.125 *. Float.sin (0.025 *. float_of_int !framecount));
+    update_euler 1 0.25;
+    update_euler 2 (0.125 *. Float.cos (0.025 *. float_of_int !framecount))
+    );
+    
     let mesh, offset = List.nth !to_draw i in
     draw_mesh mesh !euler (v3_add !translation offset)
   done;
   let input = wait_next_event [ Poll ] in
   synchronize ();
   display_mode true;
-  if input.keypressed then input_dispatch (read_key ())
+  if input.keypressed then input_dispatch (read_key ());
+  framecount := !framecount + 1
 
 let rec main_loop () =
   draw_scene ();
@@ -110,4 +121,5 @@ let start meshes =
   to_draw := List.combine meshes mesh_positions;
   auto_synchronize false;
   open_graph (" " ^ string_of_int viewportw ^ "x" ^ string_of_int viewporth);
+  set_window_title "ZENITH";
   main_loop ()
